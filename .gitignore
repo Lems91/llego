@@ -1,0 +1,32 @@
+# Dependencias y compilado
+node_modules/
+dist/
+
+# Secretos y configuración local (nunca se versionan)
+.env*
+!.env.example
+*.local
+
+# Despliegue
+.vercel/
+
+# Registros
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cobertura y caché de herramientas
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Archivos del sistema y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
