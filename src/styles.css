@@ -1,0 +1,30 @@
+/* Estilos mínimos del esqueleto. La dirección visual se elige antes de la Etapa 5. */
+:root {
+  font-family: system-ui, sans-serif;
+  color: #111;
+  background: #fff;
+}
+
+body {
+  margin: 0;
+}
+
+.testnet-banner {
+  position: sticky;
+  top: 0;
+  padding: 0.5rem 1rem;
+  background: #111;
+  color: #ffd84d;
+  font-weight: 700;
+  text-align: center;
+}
+
+.page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.tagline {
+  font-size: 1.25rem;
+}

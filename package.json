@@ -1,0 +1,30 @@
+{
+  "name": "llego",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prototipo de pasarela de pagos en Stellar TESTNET (hackathon Código Cordillera). Sin valor real.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run check:secrets && npm run check:network",
+    "preview": "vite preview",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc -p jsconfig.json",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "check:network": "node scripts/check-network.mjs"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.2.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}

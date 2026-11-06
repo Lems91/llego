@@ -1,0 +1,27 @@
+--------------------------------------------------
+FASE: Etapa 2 — Repo seguro y esqueleto
+--------------------------------------------------
+- Objetivo: dejar el repositorio listo para construir: proyecto Vite + React en JavaScript, Vitest, TypeScript solo como verificador de `src/core/`, checks de secretos y de red, cabeceras de seguridad, banner TESTNET, README con límites y licencia MIT.
+- Acciones realizadas:
+  - Creados: `.gitignore` (primer commit, aparte), `.npmrc` (`save-exact=true`), `package.json`, `package-lock.json` (generado por npm), `vite.config.js`, `jsconfig.json`, `index.html`, `vercel.json`, `LICENSE`, `README.md`.
+  - `src/`: `main.jsx`, `App.jsx`, `styles.css`, `ui/components/TestnetBanner.jsx`, `core/index.js`.
+  - `scripts/`: `check-secrets.mjs`, `check-network.mjs`.
+  - Paquetes instalados (versión exacta, aprobados por Luis): react 19.3.1, react-dom 19.3.1, vite 8.3.6, @vitejs/plugin-react 6.2.1, vitest 5.1.0, typescript 7.0.2. Verificados con `npm view` en el registro de npm.
+  - No se tocó: lógica de pagos, script de siembra, kit de wallets, `CLAUDE.md`, `docs/constitution.md`, `docs/etapa-1-plan.md`.
+- Validaciones:
+  - `npm run build`: OK (incluye `check:secrets` y `check:network`).
+  - `npm test`: OK, sin archivos de prueba (`--passWithNoTests`).
+  - `npm run typecheck`: OK.
+  - `npm run check:secrets`: OK sobre `src/`, `scripts/` y `dist/`.
+  - `npm run check:network`: OK sobre `src/` y `scripts/`.
+  - `npm audit --audit-level=high`: 0 vulnerabilidades.
+  - No verificado: que los checks fallen ante un caso malo (se probará con pruebas negativas más adelante); las cabeceras de `vercel.json` (se revisan en el despliegue, Etapa 7); el aspecto en el navegador.
+- Correcciones:
+  - `check-network.mjs` se detectaba a sí mismo por un comentario que escribía la constante prohibida; se reformuló el comentario y quedó en verde.
+- Notas y límites:
+  - `src/core/index.js` solo contiene `export {}`. Existe únicamente porque `tsc` falla si no hay archivos que revisar; se reemplaza en la Etapa 4.
+  - `vercel.json` escribe las URL de Horizon y Friendbot de testnet en la CSP (`connect-src`). Es una excepción a "las URL viven solo en `src/config/network.js`" porque el JSON no puede importar ese módulo; hay que mantener ambos sincronizados. La CSP se ajustará cuando se integre el kit de wallets (Etapa 5), con la excepción mínima y documentada.
+  - Copyright de la LICENSE puesto a nombre de "Lems91" (usuario de GitHub); Luis puede cambiarlo.
+  - La pantalla es un esqueleto sin diseño; la dirección visual se elige antes de la Etapa 5.
+- Estado: 🟢 APROBADO
+--------------------------------------------------
