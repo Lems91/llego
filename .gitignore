@@ -6,6 +6,11 @@ dist/
 .env*
 !.env.example
 *.local
+*.pem
+*.key
+
+# Configuración local de Claude Code
+.claude/
 
 # Despliegue
 .vercel/
