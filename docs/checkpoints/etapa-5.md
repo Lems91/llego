@@ -10,7 +10,8 @@ FASE: Etapa 5 — Flujo del pagador
 - Validaciones:
   - `npm run build` con `check:secrets` y `check:network`: OK. `npm test`: 6 archivos, 79 pruebas, OK. `npm run typecheck`: OK. `npm audit --audit-level=high`: 0 vulnerabilidades.
   - Comprobado en navegador (sin wallet): el inicio y la pantalla del comercio cargan sin errores de consola, y un enlace de cobro inválido muestra el motivo y no deja continuar.
-  - **NO verificado:** conexión real con Varial, firma, envío y "Pago enviado" con una wallet. La prueba de punta a punta con dos cuentas de testnet la debe hacer Luis; hasta entonces la etapa no está cerrada.
+  - Prueba manual real (Luis, 8-nov, ~18:18 hora Colombia, dos cuentas de testnet de Varial): conectar, activar recepción, agregar VESDEMO, obtener VESDEMO, cotizar, firmar y pagar 4.75 USDDEMO. Transacción exitosa en stellar.expert (hash e0237d5c649b1a42336beca7b93db7960f7ff758a6b455d27a38d50f1cbfdbf5): el pagador envió 476,4519194 VESDEMO (máximo 481,2164386 = +1 %) y el comercio recibió exactamente 4,75 USDDEMO; comisión 0,00001 XLM; válida 3 minutos.
+  - **NO verificado:** casos de error con wallet (firma rechazada, cotización vencida, enlace alterado, comercio sin trustline) y aspecto en móvil real.
 - Correcciones:
   - Se intentó el Stellar Wallets Kit 2.8.0 (JSR); la instalación falló por `ECONNRESET` de red y arrastraba un árbol enorme de dependencias (WalletConnect, Reown, Ledger, Trezor, Solana). Con aprobación de Luis se usó `@stellar/freighter-api`, el paquete que el kit usa por dentro.
 - Notas y límites:
@@ -19,5 +20,6 @@ FASE: Etapa 5 — Flujo del pagador
   - La CSP de `vercel.json` no se ha probado con la wallet ni en despliegue.
   - El paquete de la app pesa ~720 kB (SDK de Stellar); aviso de Vite, sin impacto funcional.
   - Un pago firmado y enviado con éxito no se vuelve a consultar por hash en el lado del pagador; solo el comercio hace esa verificación.
-- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente de la prueba manual con wallet)
+  - Corregido durante la prueba: `requestAccess` devolvía la cuenta ligada al sitio y no la activa; `wallet.js` ahora usa `getAddress` (cuenta activa), y Pagar avisa si la cuenta conectada es la del comercio.
+- Estado: 🟢 APROBADO (camino feliz verificado con pago real; casos de error pendientes, ver Etapa 6)
 --------------------------------------------------

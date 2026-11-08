@@ -1,7 +1,13 @@
 // Único módulo que pide firmas. Usa la API de la wallet Varial (antes Freighter) a través de
 // @stellar/freighter-api. La app nunca ve ni guarda claves: solo recibe direcciones públicas y
 // transacciones ya firmadas.
-import { getNetworkDetails, isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
+import {
+  getAddress,
+  getNetworkDetails,
+  isConnected,
+  requestAccess,
+  signTransaction,
+} from '@stellar/freighter-api';
 import { NETWORK_PASSPHRASE } from '../config/network.js';
 import { signedHashMatches } from '../core/txBuilder.js';
 import { validateAddress } from '../core/validation.js';
@@ -28,7 +34,11 @@ export async function connectWallet() {
     if (!connected.isConnected) return { ok: false, error: MISSING };
     const access = await requestAccess();
     if (access.error) return { ok: false, error: walletErrorMessage(access.error) };
-    const address = validateAddress(access.address);
+    // requestAccess puede devolver la cuenta ligada al sitio y no la activa; getAddress devuelve
+    // la cuenta activa de la wallet en este momento, así que se prefiere esa.
+    const active = await getAddress();
+    const chosen = !active.error && active.address ? active.address : access.address;
+    const address = validateAddress(chosen);
     if (!address.ok) return { ok: false, error: address.error };
     const net = await getNetworkDetails();
     if (net.error || net.networkPassphrase !== NETWORK_PASSPHRASE) {

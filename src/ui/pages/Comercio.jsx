@@ -286,7 +286,7 @@ export default function Comercio() {
           <section className="card arrived" aria-label="Llegó">
             <h2>
               <span className="dot" aria-hidden="true" />
-              ¿Ya pagaron? Llegó.
+              ¿Ya pagaron? <span className="arrived-word">Llegó.</span>
             </h2>
             <div className="amount">
               {request.amount} <small>USDDEMO</small>

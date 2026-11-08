@@ -96,6 +96,11 @@ export default function Pagar() {
     run(async () => {
       const wallet = await connectWallet();
       if (!wallet.ok) throw new Error(wallet.error);
+      if (wallet.address === request.destination) {
+        throw new Error(
+          'Esta es la cuenta del comercio. Cambia en la wallet a la cuenta del pagador y vuelve a conectar.',
+        );
+      }
       setAddress(wallet.address);
       setResult(null);
       await Promise.all([

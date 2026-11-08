@@ -9,7 +9,8 @@ FASE: Etapa 6 — Flujo del comercio, maquetas y diseño final
   - Enlace de cobro con memo aleatorio de `crypto.getRandomValues`, catálogo ficticio de 3 productos y campo de monto con tope de 10.000 USDDEMO. La consulta corre cada 5 s hasta el vencimiento (30 min).
 - Validaciones:
   - `npm run build` (con checks), `npm test` (79 pruebas), `npm run typecheck`, `npm audit --audit-level=high`: OK. Pantallas cargan sin errores de consola.
-  - **NO verificado:** el flujo completo con wallet (activar recepción, crear cobro, ver "Llegó" tras un pago real), los casos de error de la sección 8 (enlace alterado a mano con wallet, firma rechazada, cotización vencida, comercio sin trustline) y el aspecto en móvil real.
+  - Prueba manual real (Luis, 8-nov): activar recepción de USDDEMO (firma), crear cobro de 4.75, cambiar la cuenta activa de la wallet sin que la pantalla del comercio cambiara de dirección, pago desde la otra cuenta y "¿Ya pagaron? Llegó." con hash y enlace al explorador, tras reconsultar la transacción por hash.
+  - **NO verificado:** los casos de error de la sección 8 (enlace alterado a mano con wallet, firma rechazada, cotización vencida, comercio sin trustline), pagos repetidos y el aspecto en móvil real.
 - Correcciones:
   - El cobro se marca como creado 60 s antes de la hora local, para que un reloj adelantado no haga rechazar el pago por "anterior al cobro". El enlace vence 60 s antes de lo anunciado.
 - Notas y límites:
