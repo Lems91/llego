@@ -20,7 +20,7 @@ FASE: Etapa 3 — Siembra de testnet
   - Cotización VESDEMO → USDDEMO, recibir 10: cuesta 1003,1093381 VESDEMO (sin saltos intermedios).
   - Cotización XLM → VESDEMO, recibir 100: cuesta 1,0032097 XLM (sin saltos intermedios).
   - `npm run build` (con ambos checks), `npm test` (sin pruebas), `npm run typecheck` y `npm audit --audit-level=high` (0 vulnerabilidades): en verde.
-  - Pendiente de Luis: revisar los enlaces del explorador (cierre de la etapa según el plan).
+  - Enlaces del explorador revisados por Luis y etapa aprobada.
 - Correcciones:
   - La documentación web de Stellar no respondió (ECONNRESET, 3 intentos); la API se verificó en los tipos del SDK instalado. Sin discrepancias.
   - El JSON se escribe antes de las cotizaciones (el plan las ponía antes), para no perder el estado ya creado en la red si una cotización fallara.
@@ -30,5 +30,5 @@ FASE: Etapa 3 — Siembra de testnet
   - `check:network` solo detecta la frase de mainnet escrita completa, no armada por partes. La prueba negativa de ambos checks (hecha a mano en la Etapa 2) no es permanente; se anota para la Etapa 7.
   - `src/config/testnet-assets.json` no pasó por `validation.js` porque aún no existe; cuando `core/` lo lea (Etapa 4) debe validarse.
   - La CSP de `vercel.json` repite las URL de testnet (no puede importar `network.js`); mantener sincronizadas.
-- Estado: 🟢 APROBADO (a la espera de la revisión de enlaces por Luis)
+- Estado: 🟢 APROBADO
 --------------------------------------------------

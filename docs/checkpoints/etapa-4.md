@@ -1,0 +1,26 @@
+--------------------------------------------------
+FASE: Etapa 4 — Núcleo lógico y pruebas
+--------------------------------------------------
+- Objetivo: `src/core/` completo (lógica pura, con JSDoc) y pruebas de la sección 8 del plan.
+- Acciones realizadas:
+  - Creados en `src/core/`: `errors.js` (tipo Result y traducción de códigos de red), `amounts.js`, `validation.js`, `paymentRequest.js`, `txBuilder.js`, `paymentMatcher.js`; `index.js` ahora reexporta todo (antes solo `export {}`).
+  - Creados en `tests/`: `helpers.js`, `validation`, `amounts`, `paymentRequest`, `txBuilder`, `paymentMatcher` y `errors` (`*.test.js`).
+  - Sin paquetes nuevos. No se tocó: interfaz, adapters, kit de wallets, siembra.
+  - Decisiones: `core/` recibe la configuración de activos como parámetro (validada con `validateAssetsConfig`), no importa el JSON; solo importa la frase de red de `config/network.js`. El enlace de cobro se maneja como cadena de consulta (sin `URL`, que no es de ES puro). Los registros de pago llegan ya normalizados desde `adapters/network.js` (Etapa 5) con la forma `NetworkPayment` documentada en `paymentMatcher.js`.
+- Validaciones:
+  - `npm test`: 6 archivos, 78 pruebas, todas en verde.
+  - `npm run typecheck`: OK (modo estricto sobre `src/core/`).
+  - `npm run build` (con `check:secrets` y `check:network`): OK.
+  - `npm audit --audit-level=high`: 0 vulnerabilidades.
+  - Búsqueda de `dangerouslySetInnerHTML`, `innerHTML`, `eval`, `new Function` y `parseFloat` en `src/`: sin resultados. `Number()` solo aparece en `paymentRequest.js` para sellos de tiempo, no para dinero.
+  - Cubierto por pruebas: dirección válida/rota/M/secreta; montos válidos e inválidos (incluye "1e3", " 10", "10.12345678") y tope; memo de 29 caracteres; hash inválido; ida y vuelta texto↔stroops; máximo a pagar con redondeo hacia arriba; cobro creado↔analizado; activo y emisor distintos, parámetro repetido, vencido; una sola operación de recepción exacta con destino, activo, monto, máximo y memo; vencimiento ≤ 3 minutos; frase de testnet; el resumen sale decodificando la misma transacción; "llegó", 14 casos de "no coincide" con motivo (incluye emisor falso, monto, memo, destino, fecha) y "repetido"; hash firmado distinto → se rechaza.
+- Correcciones:
+  - Nombres de tipos duplicados al reexportar (`AssetsConfig`, `PaymentRequest`); se renombraron los alias locales.
+  - El SDK devuelve el memo de texto como bytes al decodificar; el resumen ahora lo convierte a texto (la prueba lo detectó).
+- Notas y límites:
+  - La prueba "wallet con firma simulada" del plan pertenece a `adapters/wallet.js` (Etapa 5). Aquí queda `signedHashMatches` en `core/`, ya probada, que usará ese adaptador.
+  - La cotización con ruta real, la lectura de pagos de Horizon y su normalización a `NetworkPayment` aún no existen (Etapa 5).
+  - Los tests no entran en `npm run typecheck`; solo `src/core/`.
+  - `check:network` solo detecta la frase de mainnet escrita completa; la prueba negativa permanente queda para la Etapa 7.
+- Estado: 🟢 APROBADO
+--------------------------------------------------
