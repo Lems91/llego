@@ -1,0 +1,19 @@
+--------------------------------------------------
+FASE: Etapa 6 — Flujo del comercio, maquetas y diseño final
+--------------------------------------------------
+- Objetivo: pantalla Comercio (conectar, activar recepción, crear cobro, esperar, "Llegó"), maquetas SIMULADO y diseño aplicado a todas las pantallas.
+- Acciones realizadas:
+  - Creados: `src/ui/pages/Comercio.jsx` y `src/ui/components/SimulatedPanels.jsx` (maquetas `SimuladoVes` y `SimuladoCop`, ambas con la etiqueta "SIMULADO: no hay cobro ni retiro reales").
+  - La dirección del comercio se guarda una sola vez al conectar (estado y referencia) y no se vuelve a leer de la wallet; la consulta de "Llegó" usa siempre esa dirección. "Usar otra cuenta" es una acción explícita que reinicia la pantalla. `signWithWallet` exige que el firmante sea la cuenta guardada.
+  - "Llegó" solo aparece si: (1) `findArrival` aprueba un pago de los últimos 50 de la cuenta, y (2) la transacción se vuelve a consultar por hash y `matchPayment` la aprueba de nuevo.
+  - Enlace de cobro con memo aleatorio de `crypto.getRandomValues`, catálogo ficticio de 3 productos y campo de monto con tope de 10.000 USDDEMO. La consulta corre cada 5 s hasta el vencimiento (30 min).
+- Validaciones:
+  - `npm run build` (con checks), `npm test` (79 pruebas), `npm run typecheck`, `npm audit --audit-level=high`: OK. Pantallas cargan sin errores de consola.
+  - **NO verificado:** el flujo completo con wallet (activar recepción, crear cobro, ver "Llegó" tras un pago real), los casos de error de la sección 8 (enlace alterado a mano con wallet, firma rechazada, cotización vencida, comercio sin trustline) y el aspecto en móvil real.
+- Correcciones:
+  - El cobro se marca como creado 60 s antes de la hora local, para que un reloj adelantado no haga rechazar el pago por "anterior al cobro". El enlace vence 60 s antes de lo anunciado.
+- Notas y límites:
+  - Las pantallas de Pagar y Comercio no tienen pruebas automáticas (la lógica sí, en `core/`); dependen de la prueba manual.
+  - Si una consulta de red falla, el comercio no ve error: se reintenta en el siguiente ciclo.
+- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente de la prueba manual de punta a punta)
+--------------------------------------------------

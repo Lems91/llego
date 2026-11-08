@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { fromStroops, maxToPay, toStroops } from '../src/core/amounts.js';
+import { compareAmounts, fromStroops, maxToPay, toStroops } from '../src/core/amounts.js';
+
+describe('compareAmounts', () => {
+  it('compara sin errores de redondeo', () => {
+    expect(compareAmounts('10', '10.0000000')).toBe(0);
+    expect(compareAmounts('10.0000001', '10')).toBe(1);
+    expect(compareAmounts('9.9999999', '10')).toBe(-1);
+  });
+});
 
 describe('toStroops / fromStroops', () => {
   it.each([

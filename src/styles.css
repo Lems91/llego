@@ -1,30 +1,93 @@
-/* Estilos mínimos del esqueleto. La dirección visual se elige antes de la Etapa 5. */
+/* Dirección visual C "Señal": azul noche, lima, cifras monoespaciadas. Solo fuentes del sistema. */
 :root {
-  font-family: system-ui, sans-serif;
-  color: #111;
-  background: #fff;
+  --bg: #0b1020;
+  --card: #141b34;
+  --card-2: #1a2342;
+  --ink: #e8ecf8;
+  --muted: #9aa6c7;
+  --lime: #b6f24a;
+  --line: #2a3560;
+  --warn: #ffd166;
+  --bad: #ff8a8a;
+  --mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  color-scheme: dark;
 }
+
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 system-ui, 'Segoe UI', sans-serif;
 }
 
 .testnet-banner {
   position: sticky;
   top: 0;
-  padding: 0.5rem 1rem;
-  background: #111;
-  color: #ffd84d;
-  font-weight: 700;
+  z-index: 10;
+  background: var(--lime);
+  color: #0b1020;
+  font: 800 0.85rem var(--mono);
   text-align: center;
+  padding: 0.55rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.page {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+.app-header { max-width: 32rem; margin: 0 auto; padding: 1.6rem 1rem 0.6rem; }
+.app-header h1 { margin: 0; font: 800 2.4rem/1 system-ui; letter-spacing: -0.03em; }
+.app-header h1 span { color: var(--lime); }
+.app-header p { margin: 0.3rem 0 0; color: var(--muted); font: 0.9rem var(--mono); }
+
+.page { max-width: 32rem; margin: 0 auto; padding: 0.4rem 1rem 3rem; display: grid; gap: 1.1rem; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.3rem; }
+.card h2 { margin: 0 0 0.6rem; font: 700 1.15rem system-ui; }
+
+.label { font: 600 0.72rem var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.mono { font: 0.82rem var(--mono); word-break: break-all; margin: 0.2rem 0 0.9rem; }
+.amount { font: 700 2.8rem/1.1 var(--mono); letter-spacing: -0.04em; margin: 0.3rem 0 0.8rem; }
+.amount small { font-size: 1rem; color: var(--lime); letter-spacing: 0; }
+.muted { color: var(--muted); }
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  background: var(--lime);
+  color: #0b1020;
+  font: 800 1rem system-ui;
+  padding: 0.95rem;
+  cursor: pointer;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn--ghost { background: transparent; color: var(--lime); border: 1px solid var(--lime); }
+.btn + .btn { margin-top: 0.6rem; }
+:focus-visible { outline: 3px solid var(--warn); outline-offset: 2px; }
+
+.sim {
+  display: inline-block;
+  border: 1px dashed var(--warn);
+  color: var(--warn);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  font: 700 0.75rem var(--mono);
 }
 
-.tagline {
-  font-size: 1.25rem;
-}
+.arrived { border-color: var(--lime); box-shadow: 0 0 0 1px var(--lime), 0 0 30px rgba(182, 242, 74, 0.2); }
+.arrived h2 { font: 800 1.8rem/1.1 system-ui; color: var(--lime); }
+.dot { display: inline-block; width: 0.7rem; height: 0.7rem; background: var(--lime); border-radius: 50%; margin-right: 0.5rem; }
+
+.notice { border: 1px solid var(--warn); border-radius: 10px; padding: 0.7rem 0.9rem; color: var(--warn); font-size: 0.9rem; }
+.error { border: 1px solid var(--bad); border-radius: 10px; padding: 0.7rem 0.9rem; color: var(--bad); font-size: 0.9rem; }
+.ok { color: var(--lime); }
+
+.steps { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 0.4rem; font-size: 0.9rem; }
+.steps li::before { content: '○ '; color: var(--muted); }
+.steps li.done::before { content: '● '; color: var(--lime); }
+
+.field { width: 100%; background: var(--card-2); border: 1px solid var(--line); border-radius: 10px; color: var(--ink); padding: 0.8rem; font: 1rem var(--mono); }
+
+a { color: var(--lime); font-weight: 700; }
+.note { color: var(--muted); font-size: 0.8rem; text-align: center; }

@@ -45,6 +45,18 @@ export function fromStroops(stroops) {
 }
 
 /**
+ * Compara dos montos en texto.
+ * @param {string} a
+ * @param {string} b
+ * @returns {-1 | 0 | 1} -1 si a < b, 0 si son iguales, 1 si a > b.
+ */
+export function compareAmounts(a, b) {
+  const x = toStroops(a);
+  const y = toStroops(b);
+  return x < y ? -1 : x > y ? 1 : 0;
+}
+
+/**
  * Máximo a pagar = cotización + tolerancia, con redondeo hacia arriba al stroop.
  * @param {string} quote Cotización (monto de origen que devolvió la red).
  * @param {bigint} [percent] Tolerancia en porcentaje entero (por defecto 1).

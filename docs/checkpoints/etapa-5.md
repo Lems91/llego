@@ -1,0 +1,23 @@
+--------------------------------------------------
+FASE: Etapa 5 — Flujo del pagador
+--------------------------------------------------
+- Objetivo: adaptadores de red y wallet y pantalla Pagar completa (validar enlace, conectar, preparar cuenta, resumen, firma, resultado con hash y enlace al explorador).
+- Acciones realizadas:
+  - Paquete nuevo: `@stellar/freighter-api` 6.0.1 (versión exacta, aprobado por Luis; verificado con `npm view`, Apache-2.0, 2 dependencias).
+  - Creados: `src/adapters/network.js`, `src/adapters/wallet.js`, `src/config/assets.js`, `src/ui/pages/Pagar.jsx`, `src/ui/pages/Inicio.jsx`, `src/ui/components/` (`AddressDisplay`, `TxLink`, `PaymentSummary`, `SimulatedBadge`, `SimulatedPanels`).
+  - Modificados: `src/App.jsx` (enrutado mínimo), `src/styles.css` (dirección visual C "Señal", elegida por Luis), `src/core/amounts.js` (`compareAmounts`, con prueba), `.npmrc` (se quitó el registro de JSR tras intentar el kit).
+  - Dirección visual: tres muestras en `design-samples/` (carpeta descartable, no se versiona).
+- Validaciones:
+  - `npm run build` con `check:secrets` y `check:network`: OK. `npm test`: 6 archivos, 79 pruebas, OK. `npm run typecheck`: OK. `npm audit --audit-level=high`: 0 vulnerabilidades.
+  - Comprobado en navegador (sin wallet): el inicio y la pantalla del comercio cargan sin errores de consola, y un enlace de cobro inválido muestra el motivo y no deja continuar.
+  - **NO verificado:** conexión real con Varial, firma, envío y "Pago enviado" con una wallet. La prueba de punta a punta con dos cuentas de testnet la debe hacer Luis; hasta entonces la etapa no está cerrada.
+- Correcciones:
+  - Se intentó el Stellar Wallets Kit 2.8.0 (JSR); la instalación falló por `ECONNRESET` de red y arrastraba un árbol enorme de dependencias (WalletConnect, Reown, Ledger, Trezor, Solana). Con aprobación de Luis se usó `@stellar/freighter-api`, el paquete que el kit usa por dentro.
+- Notas y límites:
+  - **Desviación de la rúbrica y de CLAUDE.md:** no se usa el Stellar Wallets Kit; solo funciona con Varial (antes Freighter). Otras wallets no están soportadas.
+  - `wallet.js` exige TESTNET, comprueba que el firmante sea la cuenta conectada y que el hash firmado sea igual al construido antes de enviar.
+  - La CSP de `vercel.json` no se ha probado con la wallet ni en despliegue.
+  - El paquete de la app pesa ~720 kB (SDK de Stellar); aviso de Vite, sin impacto funcional.
+  - Un pago firmado y enviado con éxito no se vuelve a consultar por hash en el lado del pagador; solo el comercio hace esa verificación.
+- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente de la prueba manual con wallet)
+--------------------------------------------------
