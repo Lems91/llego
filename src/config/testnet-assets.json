@@ -1,0 +1,36 @@
+{
+  "network": "TESTNET",
+  "seededAt": "2026-11-06T22:51:50.943Z",
+  "ledger": 5596374,
+  "assets": {
+    "VESDEMO": {
+      "code": "VESDEMO",
+      "issuer": "GCJBP7A5SXWESI3YWBJYL75Y7K5RYWPPAD3II64GAMYA7OJLOWPYWTQO"
+    },
+    "USDDEMO": {
+      "code": "USDDEMO",
+      "issuer": "GDULOXFRR6R2ULYLIGLT2X4A4COVZHHUVBYQM6TDZTWDELMHPJQIP4GK"
+    }
+  },
+  "distributor": "GBVA6Q44PGWRFUIHFACMLL5ATSEVFB6BMSGVN63C3AMUMWDUWULFE525",
+  "pools": {
+    "vesUsd": {
+      "id": "f351565203939b9bb20b0f2a67be039c3f4466daf0e0afc6bcc5a9d17f3c6acb",
+      "assetA": "USDDEMO:GDULOXFRR6R2ULYLIGLT2X4A4COVZHHUVBYQM6TDZTWDELMHPJQIP4GK",
+      "assetB": "VESDEMO:GCJBP7A5SXWESI3YWBJYL75Y7K5RYWPPAD3II64GAMYA7OJLOWPYWTQO",
+      "fee": 30
+    },
+    "xlmVes": {
+      "id": "ae02ddd2ac953bb78ad72ed0dec4e76c66a743c9a1e199f54c58ea8fca975985",
+      "assetA": "native",
+      "assetB": "VESDEMO:GCJBP7A5SXWESI3YWBJYL75Y7K5RYWPPAD3II64GAMYA7OJLOWPYWTQO",
+      "fee": 30
+    }
+  },
+  "issuersLocked": true,
+  "fictionalRates": {
+    "vesPerUsd": "100",
+    "vesPerXlm": "100",
+    "note": "Tasas ficticias de demostración: no son tasas reales de ningún mercado."
+  }
+}

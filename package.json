@@ -14,10 +14,12 @@
     "preview": "vite preview",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc -p jsconfig.json",
+    "seed": "node scripts/seed-testnet.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
     "check:network": "node scripts/check-network.mjs"
   },
   "dependencies": {
+    "@stellar/stellar-sdk": "17.4.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },

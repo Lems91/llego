@@ -1,0 +1,34 @@
+--------------------------------------------------
+FASE: Etapa 3 — Siembra de testnet
+--------------------------------------------------
+- Objetivo: crear en testnet los activos VESDEMO y USDDEMO, dos pools de liquidez y la configuración pública, con claves efímeras y emisores bloqueados, y comprobar que Horizon cotiza rutas de recepción exacta.
+- Acciones realizadas:
+  - Instalado `@stellar/stellar-sdk` 17.4.0 (versión exacta, aprobada por Luis; verificada con `npm view`). `package.json` y `package-lock.json` actualizados.
+  - Creados: `src/config/network.js` (frase de red y URL, única fuente), `scripts/seed-testnet.mjs`, script `npm run seed`.
+  - Generado por la siembra: `src/config/testnet-assets.json` (solo datos públicos).
+  - `.gitignore` ampliado antes de la etapa (`*.pem`, `*.key`, `.claude/`).
+  - No se tocó: interfaz, kit de wallets, `core/` (salvo lo ya existente).
+- Siembra ejecutada (8 transacciones, todas exitosas; enlaces de stellar.expert impresos en consola):
+  - Cuentas fondeadas con Friendbot: emisor VESDEMO, emisor USDDEMO y distribuidor.
+  - Suministro emitido: 20.000.000 VESDEMO y 200.000 USDDEMO.
+  - Pools: VESDEMO/USDDEMO (10.000.000 : 100.000) y XLM/VESDEMO (5.000 XLM : 500.000). Horizon confirmó las reservas de ambos.
+  - Depósitos con minPrice y maxPrice a ±1 % de la proporción depositada.
+  - Emisores bloqueados: Horizon confirmó peso 0 en la clave maestra de ambos.
+  - Tasas 100 VESDEMO por USDDEMO y por XLM: **ficticias, no reales** (comentadas en el script y marcadas en el JSON).
+- Validaciones:
+  - `npm run seed`: salida 0.
+  - Cotización VESDEMO → USDDEMO, recibir 10: cuesta 1003,1093381 VESDEMO (sin saltos intermedios).
+  - Cotización XLM → VESDEMO, recibir 100: cuesta 1,0032097 XLM (sin saltos intermedios).
+  - `npm run build` (con ambos checks), `npm test` (sin pruebas), `npm run typecheck` y `npm audit --audit-level=high` (0 vulnerabilidades): en verde.
+  - Pendiente de Luis: revisar los enlaces del explorador (cierre de la etapa según el plan).
+- Correcciones:
+  - La documentación web de Stellar no respondió (ECONNRESET, 3 intentos); la API se verificó en los tipos del SDK instalado. Sin discrepancias.
+  - El JSON se escribe antes de las cotizaciones (el plan las ponía antes), para no perder el estado ya creado en la red si una cotización fallara.
+- Notas y límites:
+  - Las claves de siembra no se escribieron ni imprimieron; viven solo en memoria durante el proceso. Los tokens sobrantes quedan en el distribuidor, sin clave que los mueva.
+  - La siembra solo se puede repetir con cuentas nuevas; si testnet se reinicia, se vuelve a correr y se commitea el JSON nuevo.
+  - `check:network` solo detecta la frase de mainnet escrita completa, no armada por partes. La prueba negativa de ambos checks (hecha a mano en la Etapa 2) no es permanente; se anota para la Etapa 7.
+  - `src/config/testnet-assets.json` no pasó por `validation.js` porque aún no existe; cuando `core/` lo lea (Etapa 4) debe validarse.
+  - La CSP de `vercel.json` repite las URL de testnet (no puede importar `network.js`); mantener sincronizadas.
+- Estado: 🟢 APROBADO (a la espera de la revisión de enlaces por Luis)
+--------------------------------------------------
