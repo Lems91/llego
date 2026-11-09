@@ -10,13 +10,14 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run check:secrets && npm run check:network",
+    "build": "vite build && npm run check:secrets && npm run check:network && npm run check:code",
     "preview": "vite preview",
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc -p jsconfig.json",
     "seed": "node scripts/seed-testnet.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
-    "check:network": "node scripts/check-network.mjs"
+    "check:network": "node scripts/check-network.mjs",
+    "check:code": "node scripts/check-code.mjs"
   },
   "dependencies": {
     "@stellar/freighter-api": "6.0.1",

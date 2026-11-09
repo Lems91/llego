@@ -1,12 +1,12 @@
 // Falla si el código propio (src/ y scripts/) contiene la frase de red de mainnet,
-// la constante del SDK para esa red o URLs de Horizon/RPC de mainnet. No revisa dist/ porque el SDK
-// compilado trae las constantes de todas las redes.
+// la constante del SDK para esa red o URLs de Horizon/RPC de mainnet. No revisa dist/ porque
+// el SDK compilado trae las constantes de todas las redes.
 // Los patrones se arman por partes para que este archivo no se detecte a sí mismo.
+// Límite conocido: solo detecta el texto escrito completo, no armado por partes en el código.
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
-const root = resolve(import.meta.dirname, '..');
-const dirs = ['src', 'scripts'];
 const textExt = /\.(js|jsx|mjs|cjs|json|html|css|md|txt|svg)$/i;
 
 const forbidden = [
@@ -29,25 +29,35 @@ function listFiles(dir) {
   return out;
 }
 
-let failed = false;
-for (const d of dirs) {
-  const dir = join(root, d);
-  if (!existsSync(dir)) {
-    console.error(`check:network: falta la carpeta ${d}/`);
-    failed = true;
-    continue;
-  }
-  for (const file of listFiles(dir)) {
-    const text = readFileSync(file, 'utf8');
-    for (const needle of forbidden) {
-      // Evita falsos positivos como "horizon-testnet.stellar.org" (no contiene el patrón exacto).
-      if (text.includes(needle)) {
-        console.error(`check:network: referencia a mainnet en ${file}`);
-        failed = true;
+/**
+ * @param {string} root
+ * @param {string[]} [dirs]
+ * @returns {string[]} Mensajes de error (vacío si todo está bien).
+ */
+export function scanNetwork(root, dirs = ['src', 'scripts']) {
+  const errors = [];
+  for (const d of dirs) {
+    const dir = join(root, d);
+    if (!existsSync(dir)) {
+      errors.push(`check:network: falta la carpeta ${d}/`);
+      continue;
+    }
+    for (const file of listFiles(dir)) {
+      const text = readFileSync(file, 'utf8');
+      // "horizon-testnet.stellar.org" no contiene el patrón exacto, así que no da falso positivo.
+      if (forbidden.some((needle) => text.includes(needle))) {
+        errors.push(`check:network: referencia a mainnet en ${file}`);
       }
     }
   }
+  return errors;
 }
 
-if (failed) process.exit(1);
-console.log('check:network: OK (src/ y scripts/ sin referencias a mainnet)');
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const errors = scanNetwork(resolve(import.meta.dirname, '..'));
+  if (errors.length > 0) {
+    for (const e of errors) console.error(e);
+    process.exit(1);
+  }
+  console.log('check:network: OK (src/ y scripts/ sin referencias a mainnet)');
+}

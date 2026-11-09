@@ -1,0 +1,33 @@
+--------------------------------------------------
+FASE: Etapa 7 — Endurecimiento y revisión de seguridad
+--------------------------------------------------
+- Objetivo: controles automáticos permanentes, repaso T1–T16 con evidencia y despliegue en Vercel con cabeceras revisadas.
+- Acciones realizadas:
+  - `scripts/check-secrets.mjs` y `scripts/check-network.mjs` refactorizados para poder probarse (función `scan*` exportada; el comportamiento por línea de comandos no cambia).
+  - Nuevo `scripts/check-code.mjs` y script `npm run check:code`, incluido en `npm run build`: falla ante `dangerouslySetInnerHTML`, `.innerHTML`, `.outerHTML`, `insertAdjacentHTML`, `document.write`, ejecución dinámica de código, `new Function` y recursos externos (fuentes, CDN, analítica) en `src/` e `index.html`.
+  - Nuevo `tests/checks.test.js` (17 pruebas): prueba negativa permanente de los tres checks con carpetas temporales en `tests/.tmp/` (ignorada por git y borrada al terminar).
+  - `index.html`: icono vacío (`data:,`) para evitar la petición de favicon. `.gitignore`: `tests/.tmp/`.
+- Validaciones:
+  - `npm test`: 7 archivos, 96 pruebas, OK. `npm run build` (con los tres checks), `npm run typecheck` y `npm audit --audit-level=high` (0 vulnerabilidades): OK.
+- Correcciones:
+  - Las pruebas negativas detectaron un fallo real: `check:code` no veía `.innerHTML` pegado a una variable. Corregido (el patrón que empieza por "." ya no exige separador).
+- Repaso T1–T16 (evidencia):
+  - T1 clave secreta: 🟢 `looksLikeSecretKey` en direcciones, montos y memos (pruebas); `check:secrets`; la app solo recibe direcciones públicas.
+  - T2 firmar otra cosa: 🟢 el resumen sale de decodificar la misma transacción; `signedHashMatches` y firmante verificados en `wallet.js`; pruebas de `txBuilder`.
+  - T3 mainnet: 🟢 frase y URL solo en `config/network.js`; `check:network`; `wallet.js` exige TESTNET; banner permanente. Límite: el check solo detecta la frase escrita completa.
+  - T4 enlace alterado: 🟡 validación estricta, tope y dirección completa con aviso (pruebas y prueba manual de 4 alteraciones). Riesgo aceptado: el enlace no está firmado, así que cambiar el destino da un enlace aceptado.
+  - T5 activo falso: 🟢 código y emisor en enlace, matcher y trustlines solo de la configuración (pruebas con emisor falso).
+  - T6 falso "Llegó": 🟢 `matchPayment` más reconsulta por hash; 14 casos de rechazo en pruebas; "Llegó" real verificado en pago de prueba.
+  - T7 repetidos: 🟢 memo de `crypto.getRandomValues` (22 caracteres) y marcado de repetidos (pruebas). Límite: la pantalla deja de consultar tras el primer "Llegó".
+  - T8 cotización vieja: 🟢 máximo = cotización + 1 %, vencimiento de 3 min; probado a mano el vencimiento. "Sin ruta" probado solo en lectura de código.
+  - T9 redondeo: 🟢 BigInt en `amounts.js`; sin `parseFloat` en `src/`; `Number()` solo en sellos de tiempo.
+  - T10 XSS: 🟢 `check:code` en cada compilación; enlaces externos solo desde hash validado con `rel="noopener noreferrer"`; datos de red mostrados como texto.
+  - T11 cabeceras: 🔴 definidas en `vercel.json` (CSP, `frame-ancestors 'none'`, nosniff, Referrer-Policy, Permissions-Policy, HSTS, COOP, X-Frame-Options); NO verificadas en un despliegue ni con la wallet bajo la CSP.
+  - T12 secretos en el repo: 🟡 `.gitignore`, `check:secrets` y pruebas negativas hechos; falta que Luis confirme en GitHub el escaneo de secretos y la protección de push.
+  - T13 dependencias: 🟡 versiones exactas, lockfile versionado, `npm audit` en 0; falta que Luis active las alertas de Dependabot. Desviación: no se usa Stellar Wallets Kit (ver etapa 5).
+  - T14 agente: 🟢 el agente no ejecutó git; Luis revisó los diffs y hizo los commits; trabajo solo en `C:\dev\llego` y sin leer `.env`.
+  - T15 servicio caído: 🟡 mensajes claros y reintentos limitados (3 en `network.js`); siembra repetible. Falta revisar status.stellar.org antes de grabar el video.
+  - T16 inducir a error: 🟡 etiquetas TESTNET y SIMULADO en pantalla, activos VESDEMO/USDDEMO, sin marca USDC; falta revisar README y guion (Etapa 8).
+- Pendiente para cerrar la etapa: despliegue en Vercel (requiere cuenta y aprobación de Luis), revisión de cabeceras reales y prueba de pago con wallet sobre el sitio desplegado.
+- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente despliegue y revisión de cabeceras)
+--------------------------------------------------

@@ -22,6 +22,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Carpetas temporales de las pruebas de los checks
+tests/.tmp/
+
 # Cobertura y caché de herramientas
 coverage/
 .vite/
