@@ -10,11 +10,13 @@ FASE: Etapa 6 — Flujo del comercio, maquetas y diseño final
 - Validaciones:
   - `npm run build` (con checks), `npm test` (79 pruebas), `npm run typecheck`, `npm audit --audit-level=high`: OK. Pantallas cargan sin errores de consola.
   - Prueba manual real (Luis, 8-nov): activar recepción de USDDEMO (firma), crear cobro de 4.75, cambiar la cuenta activa de la wallet sin que la pantalla del comercio cambiara de dirección, pago desde la otra cuenta y "¿Ya pagaron? Llegó." con hash y enlace al explorador, tras reconsultar la transacción por hash.
-  - **NO verificado:** los casos de error de la sección 8 (enlace alterado a mano con wallet, firma rechazada, cotización vencida, comercio sin trustline), pagos repetidos y el aspecto en móvil real.
+  - Casos de error probados a mano por Luis (8-nov), todos con el resultado esperado: (1) cotización vencida: "venció, vuelve a cotizar" y el botón pasa a "Volver a cotizar"; (2) enlace alterado: `amount=1e3`, `amount=10001`, emisor del activo cambiado y parámetro `amount` repetido, todos rechazados con el motivo en pantalla y sin dejar continuar; (3) firma rechazada en la wallet: mensaje claro y el botón sigue disponible; (4) destino sin recepción de USDDEMO: la lista lo marca como pendiente, avisa en rojo y no ofrece pagar.
+  - **NO verificado:** pagos repetidos con el mismo memo (solo pruebas unitarias) y el aspecto en móvil real.
 - Correcciones:
   - El cobro se marca como creado 60 s antes de la hora local, para que un reloj adelantado no haga rechazar el pago por "anterior al cobro". El enlace vence 60 s antes de lo anunciado.
 - Notas y límites:
   - Las pantallas de Pagar y Comercio no tienen pruebas automáticas (la lógica sí, en `core/`); dependen de la prueba manual.
   - Si una consulta de red falla, el comercio no ve error: se reintenta en el siguiente ciclo.
-- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente de la prueba manual de punta a punta)
+  - **Riesgo aceptado (constitution, sección 6):** el enlace de cobro no está firmado. Quien cambie el `destination` de un enlace válido obtiene un enlace que la app acepta y muestra con la dirección completa y el aviso "Este enlace no está verificado: confirma la dirección del comercio". Un atacante que logre que un pagador use ese enlace recibiría el pago. Los enlaces firmados (firma del comercio con `signMessage` de la wallet) quedan como mejora futura y se documentarán en el README; no prueban por sí solos la identidad del comercio (eso requeriría un registro o dominio verificado).
+- Estado: 🟢 APROBADO
 --------------------------------------------------
