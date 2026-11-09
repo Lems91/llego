@@ -1,0 +1,19 @@
+--------------------------------------------------
+FASE: Etapa 8 — Release y documentación
+--------------------------------------------------
+- Objetivo: README final, guía de demo, guion del video y checklist de entrega.
+- Acciones realizadas:
+  - `README.md` reescrito: límites, qué es real y qué es simulado, problema y usuario, cómo funciona, cómo correrlo desde cero (incluida la siembra), activos y pools desplegados, seguridad y riesgos aceptados, autoría con IA y licencia.
+  - Nuevos: `docs/guia-demo.md` (checklist previo, recorrido, qué decir y no decir, plan B, checklist de entrega) y `docs/guion-video.md` (guion de 5 minutos con tiempos).
+  - Sin cambios de código.
+- Validaciones:
+  - Búsqueda de `USDC`, "pasarela", "alianza" y nombres de proveedores reales en README, `src/`, guía, guion e `index.html`: solo aparecen en negaciones ("no es una pasarela operativa", "no hay alianzas").
+  - Cifras del README contrastadas con el código y la configuración: máximo a pagar + 1 %, vencimiento de 3 minutos, cobro de 30 minutos, tope de 10.000 USDDEMO, consulta cada 5 s, tasas ficticias de 100, emisores y pools de `testnet-assets.json`.
+  - NO verificado: que el brief de BAF y Apex pidan exactamente los elementos del checklist de entrega (se redactó con lo que dicen la constitution y el plan); la autoevaluación contra la metodología (≥ 95/100) no se ejecutó.
+- Correcciones: ninguna.
+- Notas y límites:
+  - El README nombra al autor como "Luis Sánchez (@Lems91)", con el rol "dirección y producto del proyecto" y la declaración de que el código lo escribió Claude Code.
+  - El video y la carga de enlaces en Apex son de Luis; hasta entonces la etapa no está cerrada.
+  - El README declara la desviación: no se usa Stellar Wallets Kit.
+- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente de video, autoevaluación y entrega en Apex)
+--------------------------------------------------

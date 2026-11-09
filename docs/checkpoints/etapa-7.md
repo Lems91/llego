@@ -22,12 +22,13 @@ FASE: Etapa 7 — Endurecimiento y revisión de seguridad
   - T8 cotización vieja: 🟢 máximo = cotización + 1 %, vencimiento de 3 min; probado a mano el vencimiento. "Sin ruta" probado solo en lectura de código.
   - T9 redondeo: 🟢 BigInt en `amounts.js`; sin `parseFloat` en `src/`; `Number()` solo en sellos de tiempo.
   - T10 XSS: 🟢 `check:code` en cada compilación; enlaces externos solo desde hash validado con `rel="noopener noreferrer"`; datos de red mostrados como texto.
-  - T11 cabeceras: 🔴 definidas en `vercel.json` (CSP, `frame-ancestors 'none'`, nosniff, Referrer-Policy, Permissions-Policy, HSTS, COOP, X-Frame-Options); NO verificadas en un despliegue ni con la wallet bajo la CSP.
-  - T12 secretos en el repo: 🟡 `.gitignore`, `check:secrets` y pruebas negativas hechos; falta que Luis confirme en GitHub el escaneo de secretos y la protección de push.
-  - T13 dependencias: 🟡 versiones exactas, lockfile versionado, `npm audit` en 0; falta que Luis active las alertas de Dependabot. Desviación: no se usa Stellar Wallets Kit (ver etapa 5).
+  - T11 cabeceras: 🟢 desplegado en https://llego-pied.vercel.app/ (Vercel, plan Hobby); consulta de solo lectura (HTTP 200) confirma CSP con `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `Permissions-Policy`, HSTS, COOP y `X-Frame-Options: DENY`, idénticas a `vercel.json`. Con la wallet Varial sobre el sitio desplegado, el pago de prueba de 12.5 USDDEMO terminó en "¿Ya pagaron? Llegó." y la consola solo mostró errores de la extensión de la wallet (mensajería y `ObjectMultiplex`), ninguno de "Content Security Policy".
+  - T12 secretos en el repo: 🟢 `.gitignore`, `check:secrets` y pruebas negativas; en GitHub (capturas de Luis, 8-nov) "Secret Protection" figura activa (el botón ofrece "Disable") y "Push protection" está en On.
+  - T13 dependencias: 🟢 versiones exactas, lockfile versionado, `npm audit` en 0; en GitHub, "Dependabot alerts" en On y "Dependency graph" en On. "Dependabot security updates" y "Malware alerts" quedan apagados por decisión (evitan PRs automáticos el día de la entrega). Desviación: no se usa Stellar Wallets Kit (ver etapa 5).
   - T14 agente: 🟢 el agente no ejecutó git; Luis revisó los diffs y hizo los commits; trabajo solo en `C:\dev\llego` y sin leer `.env`.
   - T15 servicio caído: 🟡 mensajes claros y reintentos limitados (3 en `network.js`); siembra repetible. Falta revisar status.stellar.org antes de grabar el video.
   - T16 inducir a error: 🟡 etiquetas TESTNET y SIMULADO en pantalla, activos VESDEMO/USDDEMO, sin marca USDC; falta revisar README y guion (Etapa 8).
-- Pendiente para cerrar la etapa: despliegue en Vercel (requiere cuenta y aprobación de Luis), revisión de cabeceras reales y prueba de pago con wallet sobre el sitio desplegado.
-- Estado: 🔴 REQUIERE CORRECCIÓN (pendiente despliegue y revisión de cabeceras)
+- Otros cambios: favicon `public/favicon.svg` (una "ó" lima sobre azul noche) enlazado desde `index.html` (cubierto por `img-src 'self'` de la CSP).
+- Pendiente de Luis (no bloquea el código): revisar status.stellar.org antes de grabar (T15).
+- Estado: 🟢 APROBADO
 --------------------------------------------------
